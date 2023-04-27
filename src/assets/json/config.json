@@ -1,0 +1,61 @@
+{
+    "type": "page",
+    "name": "page",
+    "toolbar": [],
+    "initApi": {
+        "method": "get",
+        "url": "/system/config-List"
+    },
+    "body": [
+        {
+            "type": "panel",
+            "title": "公司配置",
+            "body": [
+                {
+                    "type": "form",
+                    "api": {
+                        "method": "post",
+                        "url": "/system/config-set",
+                        "data": {
+                            "key": "sys_name",
+                            "value": "${sysName}"
+                        }
+                    },
+                    "data": {
+                        "disabled": true
+                    },
+                    "mode": "inline",
+                    "wrapWithPanel": false,
+                    "body": [
+                        {
+                            "type": "input-text",
+                            "name": "sysName",
+                            "disabledOn": "${disabled == true}",
+                            "size": "lg",
+                            "label": "公司名称"
+                        },
+                        {
+                            "type": "button",
+                            "label": "编辑",
+                            "visibleOn": "${disabled == true}",
+                            "onClick": "props.formStore.setValues({disabled: false})"
+                        },
+                        {
+                            "type": "button",
+                            "actionType": "submit",
+                            "label": "保存",
+                            "level": "warning",
+                            "visibleOn": "${disabled == false}"
+                        },
+                        {
+                            "type": "button",
+                            "label": "取消",
+                            "visibleOn": "${disabled == false}",
+                            "onClick": "props.formStore.setValues({disabled: true})"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

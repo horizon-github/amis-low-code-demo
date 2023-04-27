@@ -1,0 +1,158 @@
+{
+  "type": "page",
+  "name": "page",
+  "toolbar": [],
+  "body": [
+    {
+      "type": "form",
+      "title": "填写模拟数据",
+      "target": "crud",
+      "submitOnInit": true,
+      "initApi": {
+        "method": "get",
+        "url": "/plan/plan-list",
+        "data": {
+          "planNo": "${planNo}"
+        },
+        "responseData": {
+          "planNo": "${list[0].planNo}",
+          "planName": "${list[0].planName}",
+          "planDetailList": "${list[0].planDetailList}"
+        }
+      },
+      "className": "m-b",
+      "body": [
+        {
+          "type": "input-text",
+          "name": "planNo",
+          "label": "计划编号",
+          "placeholder": "请输入计划编号",
+          "mode": "inline",
+          "size": "lg",
+          "className": "m-r-md",
+          "disabled": true
+        },
+        {
+          "type": "input-text",
+          "name": "planName",
+          "label": "计划名称",
+          "placeholder": "请输入计划名称",
+          "mode": "inline",
+          "size": "lg",
+          "disabled": true
+        },
+        {
+          "type": "input-table",
+          "name": "planDetailList",
+          "className": "m-t-lg m-b-lg",
+          "mode": "normal",
+          "addable": false,
+          "editable": false,
+          "removable": false,
+          "columns": [
+            {
+              "type": "tpl",
+              "tpl": "${goodsNo}-${craft}",
+              "label": "商品/工艺"
+            },
+            {
+              "type": "tpl",
+              "tpl": "${currNum}件/${currMoney * currNum / 100}元",
+              "label": "实时数量/支付工资"
+            },
+            {
+              "type": "input-number",
+              "name": "currMoney",
+              "width": "200px",
+              "precision": 2,
+              "label": "工资/单价(分)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crud",
+      "type": "crud",
+      "pageField": "page",
+      "perPageField": "pageSize",
+      "api": {
+        "method": "post",
+        "sendOn": "${planDetailList}",
+        "url": "/plan/plan-up-user-money",
+        "data": {
+          "planNo": "${planNo}",
+          "planMoneyList": "${planDetailList}"
+        },
+        "responseData": {
+          "items": "${list}",
+          "total": "${total}"
+        }
+      },
+      "syncLocation": false,
+      "headerToolbar": [
+        {
+          "align": "right",
+          "type": "columns-toggler"
+        }
+      ],
+      "columns": [
+        {
+          "label": "车间",
+          "name": "workshop"
+        },
+        {
+          "label": "班组",
+          "name": "team"
+        },
+        {
+          "label": "员工编号",
+          "name": "userNo"
+        },
+        {
+          "label": "员工姓名",
+          "name": "userName"
+        },
+        {
+          "label": "模拟工资",
+          "type": "operation",
+          "buttons": [
+            {
+              "type": "button",
+              "label": "${totalCurrMoney/100}",
+              "actionType": "dialog",
+              "dialog": {
+                "title": "详情",
+                "actions": [],
+                "body": [
+                  {
+                    "type": "table",
+                    "source": "${planMoneyList}",
+                    "columns": [
+                      {
+                        "name": "goodsNo",
+                        "label": "产品编号"
+                      },
+                      {
+                        "name": "craft",
+                        "label": "工艺"
+                      },
+                      {
+                        "name": "currNum",
+                        "label": "数量"
+                      },
+                      {
+                        "name": "${currMoney/100}",
+                        "label": "模拟工资"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

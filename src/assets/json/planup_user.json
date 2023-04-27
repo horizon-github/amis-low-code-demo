@@ -1,0 +1,87 @@
+{
+  "type": "page",
+  "body": [
+    {
+      "type": "form",
+      "title": "过滤条件",
+      "target": "chart,window",
+      "submitOnInit": true,
+      "className": "m-b",
+      "mode": "inline",
+      "body": [
+        {
+          "type": "input-text",
+          "className": "m-r-md",
+          "name": "planNo",
+          "label": "计划编号",
+          "placeholder": "请输入计划编号",
+          "size": "md",
+          "autoComplete": {
+            "method": "get",
+            "url": "/system/auto-complete",
+            "data": {
+              "path": "plan_no",
+              "param": "${term}"
+            }
+          }
+        },
+        {
+          "type": "input-text",
+          "className": "m-r-md",
+          "name": "userNo",
+          "label": "员工编号",
+          "size": "md",
+          "placeholder": "请输入员工编号",
+          "autoComplete": {
+            "method": "get",
+            "url": "/system/auto-complete",
+            "data": {
+              "path": "user_no",
+              "param": "${term}"
+            }
+          }
+        },
+        {
+          "clearable": true,
+          "className": "m-r-md",
+          "type": "input-datetime-range",
+          "name": "timerAnge",
+          "size": "md",
+          "label": "上报时间范围"
+        },
+        {
+          "type": "control",
+          "label": "",
+          "body": [
+            {
+              "level": "primary",
+              "type": "submit",
+              "label": "查询"
+            }
+          ]
+        },
+        {
+          "type": "control",
+          "label": "",
+          "body": [
+            {
+              "type": "reset",
+              "label": "重置"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "body": [
+        {
+          "type": "chart",
+          "name": "chart",
+          "initFetch": false,
+          "api": "/plan/plan-up-user-chart?planNo=${planNo}&userNo=${userNo}&timerAnge=${timerAnge}"
+        }
+      ]
+    }
+  ]
+}

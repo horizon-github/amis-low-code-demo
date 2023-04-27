@@ -1,0 +1,295 @@
+{
+    "type": "page",
+    "name": "page",
+    "toolbar": [],
+    "body": [
+      {
+        "name": "crud",
+        "type": "crud",
+        "pageField": "page",
+        "perPageField": "pageSize",
+        "api": {
+          "method": "get",
+          "url": "/plan/plan-up-list",
+          "data": {
+            "&": "$$"
+          },
+          "responseData": {
+            "items": "${list}",
+            "total": "${total}"
+          }
+        },
+        "syncLocation": false,
+        "headerToolbar": [
+          {
+            "type": "button",
+            "label": "生产上报",
+            "level": "primary",
+            "size": "sm",
+            "actionType": "drawer",
+            "drawer": {
+              "title": "生产上报",
+              "size": "lg",
+              "body": {
+                "type": "form",
+                "api": {
+                  "method": "post",
+                  "url": "/plan/plan-up-add",
+                  "data": {
+                    "&": "$$",
+                    "finishNum": "${INT(finishNum)}"
+                  }
+                },
+                "body": [
+                  {
+                      "type": "input-text",
+                      "name": "planNo",
+                      "label": "计划编号",
+                      "labelRemark": {
+                        "content": "计划的唯一标识,由系统自动生成"
+                      },
+                      "placeholder": "请输入计划编号",
+                      "mode": "normal",
+                      "autoComplete": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "plan_no",
+                          "param":"${term}"
+                        }
+                      },
+                      "required": true
+                  },
+                  {
+                    "type": "select",
+                    "name": "goodsNo",
+                    "label": "产品编号",
+                    "labelRemark": {
+                      "content": "产品唯一编号,系统自动生成"
+                    },
+                    "placeholder": "请输入产品编号",
+                    "mode": "normal",
+                    "source": "get:/system/auto-complete?path=goods_no_plan&param=${planNo}",
+                    "initFetchOn": "data.planNo",
+                    "required": true
+                  },
+                  {
+                    "type": "select",
+                    "name": "craft",
+                    "label": "工艺",
+                    "labelRemark": {
+                      "content": "一件商品的步骤,例如生成一件衣服包括-裁剪,制作,打包.每个阶段分别交给不同人处理,计算工资用,如果是整体计算工资，工艺就填写 整体 这一个就可以了 "
+                    },
+                    "placeholder": "请输入工艺",
+                    "mode": "normal",
+                    "source": "get:/system/auto-complete?path=craft_plan&param=${planNo},${goodsNo}",
+                    "required": true
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "userNo",
+                    "label": "员工编号",
+                    "labelRemark": {
+                      "content": "用户唯一编号,系统自动生成"
+                    },
+                    "placeholder": "请输入员工编号",
+                    "mode": "normal",
+                    "autoComplete": {
+                      "method": "get",
+                      "url": "/system/auto-complete",
+                      "data": {
+                        "path": "user_no",
+                        "param":"${term}"
+                      }
+                    },
+                    "required": true
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "finishNum",
+                    "label": "完成数量",
+                    "placeholder": "请输入完成数量",
+                    "mode": "normal",
+                    "required": true
+                  },
+                  {
+                    "type": "textarea",
+                    "name": "remark",
+                    "label": "备注",
+                    "labelRemark": {
+                      "content": "记录一些额外信息,比如是什么原因"
+                    },
+                    "placeholder": "请输入备注",
+                    "mode": "normal"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "align": "right",
+            "type": "columns-toggler"
+          }
+        ],
+        "filter": {
+          "title": "查询条件",
+          "trimValues": true,
+          "controls": [
+            {
+              "clearable": true,
+              "className": "m-r-md",
+              "type": "input-text",
+              "name": "planNo",
+              "label": "计划编号",
+              "autoComplete": {
+                "method": "get",
+                "url": "/system/auto-complete",
+                "data": {
+                  "path": "plan_no",
+                  "param":"${term}"
+                }
+              },
+              "placeholder": "输入计划编号"
+            },
+            {
+              "clearable": true,
+              "className": "m-r-md",
+              "type": "input-text",
+              "name": "goodsNo",
+              "label": "产品编号",
+              "autoComplete": {
+                "method": "get",
+                "url": "/system/auto-complete",
+                "data": {
+                  "path": "goods_no",
+                  "param":"${term}"
+                }
+              }, 
+              "placeholder": "输入产品编号"
+            },
+            {
+              "clearable": true,
+              "className": "m-r-md",
+              "type": "input-text",
+              "name": "craft",
+              "label": "工艺",
+              "source": {
+                "method": "get",
+                "url": "/system/auto-complete",
+                "data": {
+                  "path": "craft"
+                }
+              },
+              "placeholder": "输入工艺"
+            },
+            {
+              "clearable": true,
+              "className": "m-r-md",
+              "type": "input-text",
+              "name": "userNo",
+              "label": "员工编号",
+              "autoComplete": {
+                "method": "get",
+                "url": "/system/auto-complete",
+                "data": {
+                  "path": "user_no",
+                  "param":"${term}"
+                }
+              },
+              "placeholder": "输入员工编号"
+            },
+            {
+              "clearable": true,
+              "className": "m-r-md",
+              "type": "input-datetime-range",
+              "name": "timerAnge",
+              "label": "上报时间范围"
+            },
+            {
+              "type": "control",
+              "label": "",
+              "body": [
+                {
+                  "level": "primary",
+                  "type": "submit",
+                  "label": "查询"
+                }
+              ]
+            },
+            {
+              "type": "control",
+              "label": "",
+              "body": [
+                {
+                  "type": "reset",
+                  "label": "重置"
+                }
+              ]
+            }
+          ]
+        },
+        "columns": [
+          {
+            "label": "编号",
+            "name": "id"
+          },
+          {
+            "label": "计划编号",
+            "name": "planNo"
+          },
+          {
+            "label": "产品",
+            "tpl": "${goodsNo}-${goodsAllName}"
+          },
+          {
+            "label": "工艺",
+            "name": "craft"
+          },
+          {
+            "label": "员工",
+            "tpl": "${userNo}-${userName}"
+          },
+          {
+            "label": "完成数量",
+            "name": "finishNum"
+          },
+          {
+            "label": "上报时间",
+            "tpl": "<%= date(this.createTime, 'YYYY-MM-DD HH:mm:ss') %>"
+          },
+          {
+            "label": "备注",
+            "name": "remark"
+          },
+          {
+            "type": "operation",
+            "label": "操作",
+            "buttons": [
+              {
+                "type": "button",
+                "level": "link",
+                "label": "删除",
+                "actionType": "ajax",
+                "confirmText": "您确认要删除?",
+                "api": "get:/plan/plan-up-del?id=${id}"
+              },
+              {
+                "type": "button",
+                "level": "link",
+                "label": "本计划员工图表",
+                "actionType": "link",
+                "link": "/planup/user?planNo=${planNo}&userNo=${userNo}"
+              },
+              {
+                "type": "button",
+                "level": "link",
+                "label": "员工图表",
+                "actionType": "link",
+                "link": "/planup/user?userNo=${userNo}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

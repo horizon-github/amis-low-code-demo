@@ -1,0 +1,383 @@
+{
+  "type": "page",
+  "name": "page",
+  "toolbar": [],
+  "body": [
+    {
+      "name": "crud",
+      "type": "crud",
+      "pageField": "page",
+      "perPageField": "pageSize",
+      "api": {
+        "method": "get",
+        "url": "/plan/plan-list",
+        "data": {
+          "&": "$$"
+        },
+        "responseData": {
+          "items": "${list}",
+          "total": "${total}"
+        }
+      },
+      "syncLocation": false,
+      "headerToolbar": [
+        {
+          "type": "button",
+          "label": "添加生产计划",
+          "level": "primary",
+          "size": "sm",
+          "actionType": "drawer",
+          "drawer": {
+            "title": "添加生产计划",
+            "size": "lg",
+            "body": {
+              "type": "form",
+              "api": {
+                "method": "post",
+                "url": "/plan/plan-add",
+                "data": {
+                  "&": "$$",
+                  "planStartTime": "${INT(planStartTime)}",
+                  "planEndTime": "${INT(planEndTime)}"
+                }
+              },
+              "body": [
+                {
+                    "type": "input-text",
+                    "name": "planName",
+                    "label": "计划名称",
+                    "placeholder": "请输入计划名称",
+                    "mode": "normal",
+                    "required": true
+                },
+                {
+                  "type": "input-date",
+                  "name": "planStartTime",
+                  "label": "计划开始时间",
+                  "placeholder": "请输入计划开始时间",
+                  "mode": "normal"
+                
+                },
+                {
+                  "type": "input-date",
+                  "name": "planEndTime",
+                  "label": "计划结束时间",
+                  "placeholder": "请输入计划结束时间",
+                  "mode": "normal"
+               
+                },
+                {
+                  "type": "input-table",
+                  "name": "planDetailAddReqList",
+                  "label": "生产任务排期",
+                  "className": "m-t-lg m-b-lg p-t-md p-b-md min-table",
+                  "required": true,
+                  "mode": "normal",
+                  "addable": true,
+                  "editable": false,
+                  "removable": true,
+                  "debug": true,
+                  "labelRemark": {
+                    "content": "1.产品编号: 产品唯一编号,系统自动生成 2.工艺: 一件商品的步骤,例如生成一件衣服包括-裁剪,制作,打包.每个阶段分别交给不同人处理,计算工资用,如果是整体计算工资，工艺就填写 整体 这一个就可以了 "
+                  },
+                  "columns": [
+                    {
+                      "type": "input-text",
+                      "name": "goodsNo",
+                      "label": "产品编号",
+                      "autoComplete": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "goods_no",
+                          "param":"${term}"
+                        }
+                      }
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "craft",
+                      "label": "工艺",
+                      "source": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "craft"
+                        }
+                      }
+                    },
+                    {
+                      "type": "input-number",
+                      "name": "targetNum",
+                      "label": "生成目标数量"
+                    }
+                  ]
+                },
+                {
+                  "type": "textarea",
+                  "name": "ext",
+                  "label": "备注",
+                  "labelRemark": {
+                      "content": "记录一些额外信息,比如是什么原因"
+                    },
+                  "placeholder": "请输入备注",
+                  "mode": "normal"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "align": "right",
+          "type": "columns-toggler"
+        }
+      ],
+      "filter": {
+        "title": "查询条件",
+        "trimValues": true,
+        "controls": [
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "planNo",
+            "label": "计划编号",
+            "autoComplete": {
+              "method": "get",
+              "url": "/system/auto-complete",
+              "data": {
+                "path": "plan_no",
+                "param":"${term}"
+              }
+            },
+            "placeholder": "输入计划编号"
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "planName",
+            "label": "计划名称",
+            "placeholder": "输入计划名称"
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-datetime-range",
+            "name": "timerAnge",
+            "label": "创建时间范围"
+          },
+          {
+            "type": "control",
+            "label": "",
+            "body": [
+              {
+                "level": "primary",
+                "type": "submit",
+                "label": "查询"
+              }
+            ]
+          },
+          {
+            "type": "control",
+            "label": "",
+            "body": [
+              {
+                "type": "reset",
+                "label": "重置"
+              }
+            ]
+          }
+        ]
+      },
+      "columns": [
+        {
+          "label": "编号",
+          "name": "id"
+        },
+        {
+          "label": "计划编号",
+          "name": "planNo"
+        },
+        {
+          "label": "计划名称",
+          "name": "planName"
+        },
+        {
+          "label": "计划时间",
+          "tpl": "<%= this.planStartTime > 0 ? date(this.planStartTime, 'YYYY-MM-DD') : '' %>~<%= this.planEndTime > 0 ? date(this.planEndTime, 'YYYY-MM-DD') : '' %>"
+        },
+        {
+          "label": "计划备注",
+          "name": "ext"
+        },
+        {
+          "name": "${INT(totalCurrNum*100/totalTargetNum)}",
+          "label": "总进度",
+          "width": "300px",
+          "type": "progress"
+        },
+        {
+          "label": "创建时间",
+          "tpl": "<%= date(this.createTime, 'YYYY-MM-DD HH:mm:ss') %>"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "type": "button",
+              "level": "link",
+              "label": "编辑",
+              "actionType": "drawer",
+              "drawer": {
+                "title": "编辑生产计划",
+                "size": "lg",
+                "body": {
+                  "type": "form",
+                  "api": {
+                    "method": "post",
+                    "url": "/plan/plan-update",
+                    "data": {
+                      "id": "${id}",
+                      "&": "$$",
+                      "planStartTime": "${INT(planStartTime)}",
+                      "planEndTime": "${INT(planEndTime)}",
+                      "planDetailUpdateReqList": "${planDetailList}"
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "input-text",
+                      "name": "planNo",
+                      "label": "计划编号",
+                      "placeholder": "请输入计划编号",
+                      "disabled": true,
+                      "autoComplete": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "plan_no",
+                          "param":"${term}"
+                        }
+                      },
+                      "mode": "normal"
+                    },
+                    {
+                      "type": "qr-code",
+                      "codeSize": 128,
+                      "value": "${planNo}"
+                    },
+                    {
+                        "type": "input-text",
+                        "name": "planName",
+                        "label": "计划名称",
+                        "placeholder": "请输入计划名称",
+                        "required": true,
+                        "mode": "normal"
+                    },
+                    {
+                      "type": "input-date",
+                      "name": "planStartTime",
+                      "label": "计划开始时间",
+                      "placeholder": "请输入计划开始时间",
+                      "mode": "normal"
+                    },
+                    {
+                      "type": "input-date",
+                      "name": "planEndTime",
+                      "label": "计划结束时间",
+                      "placeholder": "请输入计划结束时间",
+                      "mode": "normal"
+                    },
+                    {
+                      "type": "input-table",
+                      "name": "planDetailList",
+                      "label": "生产任务排期",
+                      "required": true,
+                      "className": "m-t-lg m-b-lg p-t-md p-b-md min-table",
+                      "mode": "normal",
+                      "addable": false,
+                      "editable": false,
+                      "removable": false,
+                      "labelRemark": {
+                        "content": "1.产品编号: 产品唯一编号,系统自动生成 2.工艺: 一件商品的步骤,例如生成一件衣服包括-裁剪,制作,打包.每个阶段分别交给不同人处理,计算工资用,如果是整体计算工资，工艺就填写 整体 这一个就可以了 "
+                      },
+                      "columns": [
+                        {
+                          "type": "tpl",
+                          "name": "goodsNo",
+                          "width": "100px",
+                          "label": "产品编号",
+                            "autoComplete": {
+                            "method": "get",
+                            "url": "/system/auto-complete",
+                            "data": {
+                              "path": "goods_no",
+                              "param":"${term}"
+                            }
+                          }
+                        },
+                        {
+                          "type": "tpl",
+                          "name": "craft",
+                          "label": "工艺",
+                          "source": {
+                            "method": "get",
+                            "url": "/system/auto-complete",
+                            "data": {
+                              "path": "craft"
+                            }
+                          }
+                        },
+                        {
+                          "type": "input-number",
+                          "name": "targetNum",
+                          "width": "100px",
+                          "label": "生成目标数量"
+                        },
+                        {
+                          "type": "tpl",
+                          "name": "currNum",
+                          "width": "100px",
+                          "label": "当前实时数量"
+                        },
+                        {
+                          "name": "${INT(currNum*100/targetNum)}",
+                          "label": "总进度",
+                          "type": "progress"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "textarea",
+                      "name": "ext",
+                      "label": "备注",
+                      "placeholder": "请输入备注",
+                      "mode": "normal"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "button",
+              "level": "link",
+              "label": "删除",
+              "actionType": "ajax",
+              "confirmText": "您确认要删除?",
+              "api": "get:/plan/plan-delete?id=${id}"
+            },
+            {
+              "type": "button",
+              "level": "link",
+              "label": "模拟工资",
+              "actionType": "link",
+              "link": "/planup/money?planNo=${planNo}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

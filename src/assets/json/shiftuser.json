@@ -1,0 +1,321 @@
+{
+  "type": "page",
+  "name": "page",
+  "toolbar": [],
+  "body": [
+    {
+      "name": "crud",
+      "type": "crud",
+      "pageField": "page",
+      "perPageField": "pageSize",
+      "api": {
+        "method": "get",
+        "url": "/user/shift-user-list",
+        "data": {
+          "&": "$$"
+        },
+        "responseData": {
+          "items": "${list}",
+          "total": "${total}"
+        }
+      },
+      "syncLocation": false,
+      "headerToolbar": [
+        {
+          "type": "button",
+          "label": "添加员工",
+          "level": "primary",
+          "size": "sm",
+          "actionType": "drawer",
+          "drawer": {
+            "title": "添加员工",
+            "size": "lg",
+            "body": {
+              "type": "form",
+              "api": {
+                "method": "post",
+                "url": "/user/shift-user-add",
+                "data": {
+                  "&": "$$"
+                }
+              },
+              "body": [
+                {
+                    "type": "input-text",
+                    "name": "workshop",
+                    "label": "车间",
+                    "labelRemark": {
+                      "content": "车间,例如:一号车间"
+                    },
+                    "value": "一号车间",
+                    "placeholder": "请输入车间",
+                    "mode": "normal",
+                    "source": {
+                      "method": "get",
+                      "url": "/system/auto-complete",
+                      "data": {
+                        "path": "workshop"
+                      }
+                    }
+                },
+                {
+                  "type": "input-text",
+                  "name": "team",
+                  "label": "班组",
+                  "labelRemark": {
+                    "content": "班组,例如:A组"
+                  },
+                  "value": "A组",
+                  "placeholder": "请输入班组",
+                  "mode": "normal",
+                  "source": {
+                    "method": "get",
+                    "url": "/system/auto-complete",
+                    "data": {
+                      "path": "team"
+                    }
+                  }
+                },
+                {
+                  "type": "input-text",
+                  "name": "userName",
+                  "label": "员工姓名",
+                  "placeholder": "请输入员工姓名",
+                  "mode": "normal",
+                  "required": true
+                },
+                {
+                  "type": "input-text",
+                  "name": "userMobile",
+                  "label": "员工手机号",
+                  "placeholder": "请输入员工手机号",
+                  "mode": "normal"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "align": "right",
+          "type": "columns-toggler"
+        }
+      ],
+      "filter": {
+        "title": "查询条件",
+        "trimValues": true,
+        "controls": [
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "workShop",
+            "label": "车间",
+            "placeholder": "输入车间",
+            "source": {
+              "method": "get",
+              "url": "/system/auto-complete",
+              "data": {
+                "path": "workshop"
+              }
+            }
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "team",
+            "label": "班组",
+            "placeholder": "输入班组",
+            "source": {
+              "method": "get",
+              "url": "/system/auto-complete",
+              "data": {
+                "path": "team"
+              }
+            }
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "userNo",
+            "label": "员工编号",
+            "autoComplete": {
+              "method": "get",
+              "url": "/system/auto-complete",
+              "data": {
+                "path": "user_no",
+                "param":"${term}"
+              }
+            },
+            "placeholder": "输入员工编号"
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "userName",
+            "label": "员工姓名",
+            "placeholder": "输入员工姓名"
+          },
+          {
+            "clearable": true,
+            "className": "m-r-md",
+            "type": "input-text",
+            "name": "userMobile",
+            "label": "员工手机号",
+            "placeholder": "输入员工手机号"
+          },
+          {
+            "type": "control",
+            "label": "",
+            "body": [
+              {
+                "level": "primary",
+                "type": "submit",
+                "label": "查询"
+              }
+            ]
+          },
+          {
+            "type": "control",
+            "label": "",
+            "body": [
+              {
+                "type": "reset",
+                "label": "重置"
+              }
+            ]
+          }
+        ]
+      },
+      "columns": [
+        {
+          "label": "编号",
+          "name": "id"
+        },
+        {
+          "label": "车间",
+          "name": "workshop"
+        },
+        {
+          "label": "班组",
+          "name": "team"
+        },
+        {
+          "label": "员工编号",
+          "name": "userNo"
+        },
+        {
+          "label": "员工姓名",
+          "name": "userName"
+        },
+        {
+          "label": "入职时间",
+          "tpl": "<%= date(this.createTime, 'YYYY-MM-DD HH:mm:ss') %>"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "type": "button",
+              "level": "link",
+              "label": "编辑",
+              "actionType": "drawer",
+              "drawer": {
+                "title": "编辑员工",
+                "size": "lg",
+                "body": {
+                  "type": "form",
+                  "api": {
+                    "method": "post",
+                    "url": "/user/shift-user-update",
+                    "data": {
+                      "id": "${id}",
+                      "&": "$$"
+                    }
+                  },
+                  "body": [
+                    {
+                        "type": "input-text",
+                        "name": "workshop",
+                        "label": "车间",
+                        "placeholder": "请输入车间",
+                        "mode": "normal",
+                        "source": {
+                          "method": "get",
+                          "url": "/system/auto-complete",
+                          "data": {
+                            "path": "workshop"
+                          }
+                        }
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "team",
+                      "label": "班组",
+                      "placeholder": "请输入班组",
+                      "mode": "normal",
+                      "source": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "team"
+                        }
+                      }
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "userNo",
+                      "label": "员工编号",
+                      "placeholder": "请输入员工编号",
+                      "mode": "normal",
+                      "autoComplete": {
+                        "method": "get",
+                        "url": "/system/auto-complete",
+                        "data": {
+                          "path": "user_no",
+                          "param":"${term}"
+                        }
+                      },
+                      "disabled": true
+                    },
+                    {
+                      "type": "qr-code",
+                      "codeSize": 128,
+                      "value": "${userNo}"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "userName",
+                      "label": "员工姓名",
+                      "required": true,
+                      "placeholder": "请输入员工姓名",
+                      "mode": "normal"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "userMobile",
+                      "label": "员工手机号",
+                      "placeholder": "请输入员工手机号",
+                      "mode": "normal"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "button",
+              "level": "link",
+              "label": "删除",
+              "actionType": "ajax",
+              "confirmText": "您确认要删除?",
+              "api": "get:/user/shift-user-delete?id=${id}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

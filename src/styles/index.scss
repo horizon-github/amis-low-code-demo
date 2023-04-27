@@ -1,0 +1,73 @@
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  color: #2468f2;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+.box-main {
+  border-radius: 4px;
+  margin: 20px 20px 0 20px;
+}
+
+.cxd-Page {
+  background-color: transparent;
+}
+
+.cxd-Drawer-content {
+  border-radius: 0
+}
+
+.input-Disabled {
+  background-color: #f7f7f9;
+}
+
+.min-table .cxd-Table-content{
+  min-height: 150px;
+}
+
